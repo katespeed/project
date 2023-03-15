@@ -23,93 +23,77 @@ async function getAllUsers(): Promise<User[]> {
   return userRepository.find();
 }
 
-// async function getAllUnverifiedUsers(): Promise<User[]> {
-//   return userRepository.find({ where: { verifiedEmail: false } });
-// }
-
 async function getUserByEmail(email: string): Promise<User | null> {
   const user = await userRepository.findOne({ where: { email } });
   return user;
 }
 
-async function getUserById(userId: string): Promise<User | null> {
-  const user = await userRepository.findOne({
-    select: {
-      // except hash
-      userId: true,
-      email: true,
-      // profileViews: true,
-      // verifiedEmail: true,
-    },
-    where: { userId },
-  });
+async function getUserByName(userName: string): Promise<User | null> {
+  const user = await userRepository.findOne({ where: { userName } });
   return user;
 }
 
-// async function getViralUsers(): Promise<User[]> {
-//   const viralUsers = await userRepository
-//     .createQueryBuilder('user')
-//     .where('profileViews >= :viralAmount', { viralAmount: 1000 })
-//     .select(['user.email', 'user.profileViews'])
-//     .getMany();
-//   return viralUsers;
-// }
+async function getUserById(userId: string): Promise<User | null> {
+  const user = await userRepository.findOne({ where: { userId } });
+  return user;
+}
 
-// async function getUsersByViews(minViews: number): Promise<User[]> {
-//   const viralUsers = await userRepository
-//     .createQueryBuilder('user')
-//     .where('profileViews >= :minViews and verifiedEmain=true', { minViews }) // Paramater key and name must match
-//     .select(['user.email', 'user.profileViews', 'user.joinedOn', 'user.userId'])
-//     .getMany();
-//   return viralUsers;
-// }
+async function updateEmailAddress(userId: string, newEmail: string): Promise<void> {
+  await userRepository
+    .createQueryBuilder()
+    .update(User)
+    .set({ email: newEmail })
+    .where({ userId })
+    .execute();
+}
 
-// async function resetAllProfileViews(): Promise<void> {
-//   await userRepository.createQueryBuilder().update(User).set({ profileViews: 0 }).execute();
-// }
+async function updateName(userId: string, newName: string): Promise<void> {
+  await userRepository
+    .createQueryBuilder()
+    .update(User)
+    .set({ userName: newName })
+    .where({ userId })
+    .execute();
+}
 
-// async function resetAllUnverifiedProfileViews(): Promise<void> {
-//   await userRepository
-//     .createQueryBuilder()
-//     .update(User)
-//     .set({ profileViews: 0 })
-//     .where('unverified <> true')
-//     .execute();
-// }
+async function incrementFriends(userData: User): Promise<User> {
+  const updatedUser = userData;
+  updatedUser.numOfFriends += 1;
 
-// async function incrementProfileViews(userData: User): Promise<User> {
-//   const updatedUser = userData;
-//   updatedUser.profileViews += 1;
-//   await userRepository
-//     .createQueryBuilder()
-//     .update(User)
-//     .set({ profileViews: updatedUser.profileViews })
-//     .where({ userId: updatedUser.userId })
-//     .execute();
-//   return updatedUser;
-// }
+  await userRepository
+    .createQueryBuilder()
+    .update(User)
+    .set({ numOfFriends: updatedUser.numOfFriends })
+    .where({ userId: updatedUser.userId })
+    .execute();
+  return updatedUser;
+}
 
-// async function updateEmailAddress(userId: string, newEmail: string): Promise<void> {
-//   // TODO: Implement me!
-//   await userRepository
-//     .createQueryBuilder()
-//     .update(User)
-//     .set({ email: newEmail })
-//     .where({ userId })
-//     .execute();
-// }
+async function decrementFriends(userData: User): Promise<User> {
+  const updatedUser = userData;
+  updatedUser.numOfFriends -= 1;
+  if (updatedUser.numOfFriends < 0) {
+    updatedUser.numOfFriends = 0;
+  }
+  await userRepository
+    .createQueryBuilder()
+    .update(User)
+    .set({ numOfFriends: updatedUser.numOfFriends })
+    .where({ userId: updatedUser.userId })
+    // .limit(0)
+    .execute();
+  return updatedUser;
+}
 
 export {
   addUser,
   getUserByEmail,
   getUserById,
+  getUserByName,
   getAllUsers,
-  //   getAllUnverifiedUsers,
-  //   getViralUsers,
-  //   getUsersByViews,
   allUserData,
-  //   resetAllProfileViews,
-  //   resetAllUnverifiedProfileViews,
-  //   incrementProfileViews,
-  // updateEmailAddress,
+  updateEmailAddress,
+  updateName,
+  incrementFriends,
+  decrementFriends,
 };
