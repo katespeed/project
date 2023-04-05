@@ -9,9 +9,15 @@ import {
   getAllUsers,
   updateUserEmail,
   updateUserName,
-  addFriend,
-  removeFriend,
+  //   addFriend,
+  //   removeFriend,
 } from './controllers/UserController';
+
+import {
+  deleteFriendForUser,
+  getFriendsForUser,
+  registerFriend,
+} from './controllers/FriendController';
 
 const app: Express = express();
 const { PORT, COOKIE_SECRET } = process.env;
@@ -29,15 +35,21 @@ app.use(
   })
 );
 
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(express.static('public', { extensions: ['html'] }));
 
+// User
 app.get('/api/users', getAllUsers); // Get user data
-app.post('/api/users', registerUser); // Create an Account
+app.post('/api/register', registerUser); // Create an Account
 app.post('/api/login', logIn); // log in to an Account
 app.post('/api/users/:userId/email', updateUserEmail); // update email
 app.post('/api/users/:userId/userName', updateUserName); // update userName
-app.post('/api/users/:userId/friends/add', addFriend); // add friend + 1
-app.post('/api/users/:userId/friends/remove', removeFriend); // remove friend - 1
+
+// Friends
+app.get('/api/user/:userId/friend', getFriendsForUser); // get all friends
+app.post('/api/user/friend/add', registerFriend); // register friend
+app.post('/api/user/friend/:friendId', deleteFriendForUser); // remove friend - 1
 
 app.listen(PORT, () => {
   console.log(`Listening at http://localhost:${PORT}`);

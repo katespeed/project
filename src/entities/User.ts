@@ -38,6 +38,9 @@ export class User {
   @Column({ unique: true })
   passwordHash: string;
 
+  @Column({ default: false })
+  isAdmin: boolean;
+
   @ManyToMany(() => Languages, (languages) => languages.user)
   @JoinTable()
   language: Relation<Languages>[];

@@ -24,23 +24,36 @@ async function getAllUsers(): Promise<User[]> {
 }
 
 async function getUserByEmail(email: string): Promise<User | null> {
-  const user = await userRepository.findOne({ where: { email } });
+  const user = await userRepository
+    .createQueryBuilder('user')
+    .leftJoinAndSelect('user.friend', 'friend')
+    .where('user.email = :email', { email })
+    .getOne();
   return user;
 }
 
 async function getUserByName(userName: string): Promise<User | null> {
-  const user = await userRepository.findOne({ where: { userName } });
+  const user = await userRepository
+    .createQueryBuilder('user')
+    .leftJoinAndSelect('user.friend', 'friend')
+    .where('user.userName = :userName', { userName })
+    .getOne();
   return user;
 }
 
 async function getUserById(userId: string): Promise<User | null> {
-  const user = await userRepository.findOne({ where: { userId } });
+  const user = await userRepository
+    .createQueryBuilder('user')
+    .leftJoinAndSelect('user.friend', 'friend')
+    .where('user.userId = :userId', { userId })
+    .getOne();
   return user;
 }
 
 async function updateEmailAddress(userId: string, newEmail: string): Promise<void> {
   await userRepository
     .createQueryBuilder()
+    .leftJoinAndSelect('user.friend', 'friend')
     .update(User)
     .set({ email: newEmail })
     .where({ userId })
@@ -50,39 +63,11 @@ async function updateEmailAddress(userId: string, newEmail: string): Promise<voi
 async function updateName(userId: string, newName: string): Promise<void> {
   await userRepository
     .createQueryBuilder()
+    .leftJoinAndSelect('user.friend', 'friend')
     .update(User)
     .set({ userName: newName })
     .where({ userId })
     .execute();
-}
-
-async function incrementFriends(userData: User): Promise<User> {
-  const updatedUser = userData;
-  updatedUser.numOfFriends += 1;
-
-  await userRepository
-    .createQueryBuilder()
-    .update(User)
-    .set({ numOfFriends: updatedUser.numOfFriends })
-    .where({ userId: updatedUser.userId })
-    .execute();
-  return updatedUser;
-}
-
-async function decrementFriends(userData: User): Promise<User> {
-  const updatedUser = userData;
-  updatedUser.numOfFriends -= 1;
-  if (updatedUser.numOfFriends < 0) {
-    updatedUser.numOfFriends = 0;
-  }
-  await userRepository
-    .createQueryBuilder()
-    .update(User)
-    .set({ numOfFriends: updatedUser.numOfFriends })
-    .where({ userId: updatedUser.userId })
-    // .limit(0)
-    .execute();
-  return updatedUser;
 }
 
 export {
@@ -94,6 +79,4 @@ export {
   allUserData,
   updateEmailAddress,
   updateName,
-  incrementFriends,
-  decrementFriends,
 };

@@ -1,9 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, Relation, Column } from 'typeorm';
+import { Entity, PrimaryColumn, ManyToOne, Relation, Column } from 'typeorm';
 import { User } from './User';
 
 @Entity()
 export class Friend {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn()
   friendId: string;
 
   @Column({ default: '' })

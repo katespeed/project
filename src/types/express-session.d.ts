@@ -11,6 +11,6 @@ declare module 'express-session' {
     };
     isLoggedIn: boolean;
     logInAttempts: number;
-    logInTimeout: Date;
+    logInTimeout: string; // Date
   }
 }

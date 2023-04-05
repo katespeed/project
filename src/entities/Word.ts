@@ -1,8 +1,11 @@
-import { Entity, ManyToMany, Relation, Column } from 'typeorm';
+import { Entity, ManyToMany, Relation, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { Languages } from './Language';
 
 @Entity()
 export class Word {
+  @PrimaryGeneratedColumn('uuid')
+  worId: string;
+
   @Column({ default: '' })
   languageId: string;
 

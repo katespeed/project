@@ -8,8 +8,8 @@ import {
   allUserData,
   updateEmailAddress,
   updateName,
-  incrementFriends,
-  decrementFriends,
+  //   incrementFriends,
+  //   decrementFriends,
 } from '../models/UserModel';
 import { parseDatabaseError } from '../utils/db-utils';
 
@@ -33,33 +33,6 @@ async function registerUser(req: Request, res: Response): Promise<void> {
     res.status(500).json(databaseErrorMessage);
   }
 }
-
-// async function logIn(req: Request, res: Response): Promise<void> {
-//   const { email, password } = req.body as NewUserRequest;
-//   const user = await getUserByEmail(email);
-//   if (!user) {
-//     res.sendStatus(403); // 403 Forbidden - email doesn't exist
-//     return;
-//   }
-//   const { passwordHash } = user;
-//   if (!(await argon2.verify(passwordHash, password))) {
-//     // if (!req.session.logInAttempts) {
-//     //   req.session.logInAttempts = 1; // First attempt
-//     // } else {
-//     //   req.session.logInAttempts += 1; // increment their attempts
-//     // }
-//     res.sendStatus(403); // 403 Forbidden - invalid password
-//     return;
-//   }
-//   //   await req.session.clearSession();
-//   //   req.session.user = {
-//   //     userId: user.userId,
-//   //     email: user.email,
-//   //   };
-//   //   req.session.isLoggedIn = true;
-
-//   res.sendStatus(200);
-// }
 
 async function logIn(req: Request, res: Response): Promise<void> {
   console.log(req.session);
@@ -160,38 +133,12 @@ async function updateUserName(req: Request, res: Response): Promise<void> {
   }
 }
 
-async function addFriend(req: Request, res: Response): Promise<void> {
-  const { userId } = req.params as UserIdParam;
-  let user = await getUserById(userId);
-  if (!user) {
-    res.sendStatus(404); // 404 Not Found
-    return;
-  }
-  // implement add friends
-
-  user = await incrementFriends(user);
-  res.json(user);
-}
-
-async function removeFriend(req: Request, res: Response): Promise<void> {
-  const { userId } = req.params as UserIdParam;
-  let user = await getUserById(userId);
-  if (!user) {
-    res.sendStatus(404); // 404 Not Found
-    return;
-  }
-  // implement remove friends
-
-  user = await decrementFriends(user);
-  res.json(user);
-}
-
 export {
   registerUser,
   logIn,
   getAllUsers,
   updateUserEmail,
   updateUserName,
-  addFriend,
-  removeFriend,
+  //   addFriend,
+  //   removeFriend,
 };
