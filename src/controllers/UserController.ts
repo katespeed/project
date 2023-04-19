@@ -18,6 +18,12 @@ async function getAllUsers(req: Request, res: Response): Promise<void> {
   res.json(users);
 }
 
+async function getUsers(req: Request, res: Response): Promise<void> {
+  const { userId } = req.params as UserIdParam;
+  const users = await getUserById(userId);
+  res.json(users);
+}
+
 async function registerUser(req: Request, res: Response): Promise<void> {
   const { userName, email, password } = req.body as NewUserRequest;
   // Hash the user's password
@@ -26,7 +32,7 @@ async function registerUser(req: Request, res: Response): Promise<void> {
     // Store the hash instead of their actual password
     const newUser = await addUser(userName, email, passwordHash);
     console.log(newUser);
-    res.sendStatus(201);
+    res.redirect('/login');
   } catch (err) {
     console.error(err);
     const databaseErrorMessage = parseDatabaseError(err);
@@ -55,7 +61,8 @@ async function logIn(req: Request, res: Response): Promise<void> {
 
   const user = await getUserByEmail(email);
   if (!user) {
-    res.sendStatus(404); // 404 Not Found - email doesn't exist
+    // res.sendStatus(404); // 404 Not Found - email doesn't exist
+    res.redirect('/login');
     return;
   }
 
@@ -76,7 +83,8 @@ async function logIn(req: Request, res: Response): Promise<void> {
       req.session.logInAttempts = 0; // NOTES: Reset their attempts
     }
 
-    res.sendStatus(404); // 404 Not Found - user with email/pass doesn't exist
+    // res.sendStatus(404); // 404 Not Found - user with email/pass doesn't exist
+    res.redirect('/login');
     return;
   }
 
@@ -90,9 +98,28 @@ async function logIn(req: Request, res: Response): Promise<void> {
   };
   req.session.isLoggedIn = true;
 
-  res.sendStatus(200);
+  res.render('homePage', { userName: user.userName, userId: user.userId });
 }
 
+async function getUserProfileData(req: Request, res: Response): Promise<void> {
+  const { userId } = req.params as UserIdParam;
+
+  // Get the user account
+  const user = await getUserById(userId);
+  if (!user) {
+    res.sendStatus(404); // 404 Not Found
+    return;
+  }
+
+  // res.json(user);
+  res.render('profilePage', {
+    userId: user.userId,
+    userName: user.userName,
+    email: user.email,
+    numOfFriends: user.numOfFriends,
+  });
+}
+// `/users/${user.userId}`
 async function updateUserEmail(req: Request, res: Response): Promise<void> {
   const { userId } = req.params as UserIdParam;
   const { newEmail } = req.body as NewEmailBody;
@@ -134,11 +161,11 @@ async function updateUserName(req: Request, res: Response): Promise<void> {
 }
 
 export {
+  getUsers,
   registerUser,
   logIn,
   getAllUsers,
   updateUserEmail,
   updateUserName,
-  //   addFriend,
-  //   removeFriend,
+  getUserProfileData,
 };

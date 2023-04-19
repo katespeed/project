@@ -16,15 +16,19 @@
             </div>
             <div class="form">
                 <form action="/api/register" method="post">
-                    <label for="email">Email:</label>
-                    <input placeholder="Email" class="text" type="text" id="email" name="email" required />
+                    <div>
+                        <label for="email">Email:</label>
+                        <input placeholder="Email" class="text" type="text" id="email" name="email" required />
+                    </div>
+                    <div>
+                        <label for="userName">Username:</label>
+                        <input placeholder="UserName" class="text" type="text" id="userName" name="userName" required />
+                    </div>
+                    <div>
+                        <label for="password">Password:</label>
+                        <input placeholder="Password" class="password" type="password" id="password" name="password" required />
+                    </div>
                     
-                    <label for="userName">Username:</label>
-                    <input placeholder="UserName" class="text" type="text" id="userName" name="userName" required />
-                    
-                    <label for="password">Password:</label>
-                    <input placeholder="Password" class="password" type="password" id="password" name="password" required />
-
                     <button class="btn">Create Account</button>
                 </form>
             </div>
