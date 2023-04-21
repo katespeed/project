@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Friend List | Language Learning</title>
+    </head>
+    <body>
+        <h1>Friends List</h1>
+
+        <% if (friends.length === 1) { %>
+        <h2>You have a friend.</h2>
+        <% } else { %>
+        <h2>You have are <%= friends.length %> friends.</h2>
+        <% } %>
+        <ul>
+            <% for( const friend of friends ) { %>
+            <a href="/friends/<%= user.userId %>">
+                <li class="friend">
+                    <h3 class="friend"><%= friend.friendId %></h3>
+                    <h3 class="friend"><%= friend.friendName %></h3>
+                </li>
+            </a>
+            <% } %>
+        </ul>
+        <h2>----------------</h2>
+    </body>
+</html>

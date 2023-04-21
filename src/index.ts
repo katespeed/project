@@ -18,6 +18,13 @@ import {
   getFriendsForUser,
   registerFriend,
 } from './controllers/FriendController';
+import { validateLoginBody, validateNewUserBody } from './validators/authValidator';
+import {
+  getAllLanguages,
+  // getAllLanguages,
+  getUserLanguages,
+  createLanguage,
+} from './controllers/LanguageController';
 
 const app: Express = express();
 app.set('view engine', 'ejs');
@@ -50,15 +57,22 @@ app.use(express.urlencoded({ extended: false }));
 
 // User
 app.get('/api/users', getAllUsers); // Get user data
-app.post('/api/register', registerUser); // Create an Account
-app.post('/api/login', logIn); // log in to an Account
+app.post('/api/register', validateNewUserBody, registerUser); // Create an Account
+app.post('/api/login', validateLoginBody, logIn); // log in to an Account
 app.post('/api/users/:userId/email', updateUserEmail); // update email
 app.post('/api/users/:userId/userName', updateUserName); // update userName
-app.get('/users/:userId', getUserProfileData);
+
+app.get('/users/:userId', getUserProfileData); // get user profile
+
+// Language
+app.get('/languages/:userId', getUserLanguages);
+// app.post('/api/languages', createLanguage);
+app.get('/api/languages', getAllLanguages);
+
 // res.render('homePage', { email: user.email });
 
 // Friends
-app.get('/api/user/:userId/friend', getFriendsForUser); // get all friends
+app.get('/friends/:userId', getFriendsForUser); // get all friends
 app.post('/api/user/friend/add', registerFriend); // register friend
 app.post('/api/user/friend/:friendId', deleteFriendForUser); // remove friend - 1
 

@@ -12,7 +12,7 @@ import {
 } from 'typeorm';
 import { Languages } from './Language';
 import { Game } from './Game';
-import { Friend } from './Friends';
+import { Friends } from './Friends';
 import { Libraries } from './Libraries';
 
 @Entity()
@@ -48,8 +48,8 @@ export class User {
   @ManyToOne(() => Game, (game) => game.user)
   game: Relation<Game>;
 
-  @OneToMany(() => Friend, (friend) => friend.user)
-  friend: Relation<Friend>[];
+  @OneToMany(() => Friends, (friend) => friend.user)
+  friend: Relation<Friends>[];
 
   @OneToOne(() => Libraries, (libraries) => libraries.user)
   @JoinColumn()

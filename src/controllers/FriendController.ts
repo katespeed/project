@@ -19,12 +19,9 @@ async function getFriendsForUser(req: Request, res: Response): Promise<void> {
   if (!user) {
     res.sendStatus(404);
   }
-  let friends;
-  if (req.session.isLoggedIn) {
-    friends = await getFriendsByUserId(userId);
-  }
-  console.log('friend: ', friends);
-  res.json(friends);
+  const friends = await getFriendsByUserId(userId);
+  // res.json(friends);
+  res.render('friendsPage', { friends });
 }
 
 async function registerFriend(req: Request, res: Response): Promise<void> {

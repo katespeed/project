@@ -2,7 +2,7 @@ import { Entity, PrimaryColumn, ManyToOne, Relation, Column } from 'typeorm';
 import { User } from './User';
 
 @Entity()
-export class Friend {
+export class Friends {
   @PrimaryColumn()
   friendId: string;
 

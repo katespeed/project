@@ -1,10 +1,10 @@
 import { AppDataSource } from '../dataSource';
-import { Friend } from '../entities/Friends';
+import { Friends } from '../entities/Friends';
 import { User } from '../entities/User';
 
-const friendRepository = AppDataSource.getRepository(Friend);
+const friendRepository = AppDataSource.getRepository(Friends);
 
-async function getFriendsByUserId(userId: string): Promise<Friend[]> {
+async function getFriendsByUserId(userId: string): Promise<Friends[]> {
   const links = await friendRepository
     .createQueryBuilder('friend')
     .where({ user: { userId } }) // NOTES: This is how you do nested WHERE clauses
@@ -18,10 +18,10 @@ async function getFriendsByUserId(userId: string): Promise<Friend[]> {
   return links;
 }
 
-async function addFriend(friendId: string, friendName: string, creater: User): Promise<Friend> {
+async function addFriend(friendId: string, friendName: string, creater: User): Promise<Friends> {
   let num = creater.numOfFriends;
   num += 1;
-  let newFriend = new Friend();
+  let newFriend = new Friends();
   newFriend.friendId = friendId;
   newFriend.friendName = friendName;
   newFriend.user = creater;

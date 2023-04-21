@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Languages List | Language Learning</title>
+    </head>
+    <body>
+        <h1>Languages List</h1>
+
+        <% if (languages.length === 1) { %>
+        <h2>There is <%= languages.length %> language.</h2>
+        <% } else { %>
+        <h2>There are <%= languages.length %> languages.</h2>
+        <% } %>
+
+        <a href="/addLanguages">Add a new Language</a>
+        <ul>
+            <% for( const language of languages ) { %>
+            <a href="/languages/<%= user.userId %>">
+                <li class="book">
+                    <h3 class="bookTitle"><%= languages.language %></h3>
+                </li>
+            </a>
+            <% } %>
+        </ul>
+    </body>
+</html>

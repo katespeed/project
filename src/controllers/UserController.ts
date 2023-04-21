@@ -83,7 +83,7 @@ async function logIn(req: Request, res: Response): Promise<void> {
       req.session.logInAttempts = 0; // NOTES: Reset their attempts
     }
 
-    // res.sendStatus(404); // 404 Not Found - user with email/pass doesn't exist
+    res.sendStatus(404); // 404 Not Found - user with email/pass doesn't exist
     res.redirect('/login');
     return;
   }
@@ -119,6 +119,7 @@ async function getUserProfileData(req: Request, res: Response): Promise<void> {
     numOfFriends: user.numOfFriends,
   });
 }
+
 // `/users/${user.userId}`
 async function updateUserEmail(req: Request, res: Response): Promise<void> {
   const { userId } = req.params as UserIdParam;
