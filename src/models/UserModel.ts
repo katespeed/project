@@ -50,6 +50,15 @@ async function getUserById(userId: string): Promise<User | null> {
   return user;
 }
 
+async function getUserByEmailAndName(email: string, userName: string): Promise<User | null> {
+  const user = await userRepository
+    .createQueryBuilder('user')
+    .leftJoinAndSelect('user.friend', 'friend')
+    .where('user.email = :email', { email })
+    .andWhere('user.userName = :userName', { userName })
+    .getOne();
+  return user;
+}
 async function updateEmailAddress(userId: string, newEmail: string): Promise<void> {
   await userRepository
     .createQueryBuilder()
@@ -75,6 +84,7 @@ export {
   getUserByEmail,
   getUserById,
   getUserByName,
+  getUserByEmailAndName,
   getAllUsers,
   allUserData,
   updateEmailAddress,

@@ -4,7 +4,7 @@ import { User } from '../entities/User';
 
 const languageRepository = AppDataSource.getRepository(Languages);
 
-async function addLanguage(language: string, byUser: User): Promise<Languages> {
+async function addLanguage(language: string, byUser: User[]): Promise<Languages> {
   // Create the new Review object
   let newLanguage = new Languages();
   newLanguage.language = language;

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getUserById } from '../models/UserModel';
+import { getUserById, getUserByEmail, getUserByEmailAndName } from '../models/UserModel';
 import {
   addFriend,
   //   decrementFriends,
@@ -33,14 +33,31 @@ async function registerFriend(req: Request, res: Response): Promise<void> {
   const { authenticatedUser } = req.session;
   const user = await getUserById(authenticatedUser.userId);
   // Check if you got back `null`
+  console.log(1);
   if (!user) {
     res.sendStatus(404);
-
     return;
   }
-  const { friendId, friendName } = req.body as NewFriendRequest;
+
+  const { email, friendName } = req.body as NewFriendRequest;
+  console.log(2);
+  // check if the user with the email exists or not
+  if (!(await getUserByEmail(email))) {
+    res.sendStatus(404);
+    return;
+  }
+  console.log(3);
+  // username is not unique so getUserByNameEmail is required
+  const friendUser = await getUserByEmailAndName(email, friendName);
+  console.log(4);
+  // check if the newFriend already exits in the user's friend list
+  // if (friendBelongsToUser(friendUser.userId, user.userId)) {
+  //   res.sendStatus(404);
+  //   return;
+  // }
+
   try {
-    const newFriend = await addFriend(friendId, friendName, user);
+    const newFriend = await addFriend(friendUser.userId, friendName, user);
     console.log(newFriend);
     res.sendStatus(201);
   } catch (err) {

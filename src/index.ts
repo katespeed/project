@@ -18,12 +18,12 @@ import {
   getFriendsForUser,
   registerFriend,
 } from './controllers/FriendController';
-import { validateLoginBody, validateNewUserBody } from './validators/authValidator';
+// import { validateLoginBody, validateNewUserBody } from './validators/authValidator';
 import {
   getAllLanguages,
   // getAllLanguages,
   getUserLanguages,
-  createLanguage,
+  // createLanguage,
 } from './controllers/LanguageController';
 
 const app: Express = express();
@@ -57,8 +57,8 @@ app.use(express.urlencoded({ extended: false }));
 
 // User
 app.get('/api/users', getAllUsers); // Get user data
-app.post('/api/register', validateNewUserBody, registerUser); // Create an Account
-app.post('/api/login', validateLoginBody, logIn); // log in to an Account
+app.post('/api/register', registerUser); // Create an Account
+app.post('/api/login', logIn); // log in to an Account
 app.post('/api/users/:userId/email', updateUserEmail); // update email
 app.post('/api/users/:userId/userName', updateUserName); // update userName
 

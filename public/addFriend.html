@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Friend</title>
+</head>
+<body>
+  <div class="formCard">
+    <section class="form-container">
+        <div>
+            <h1 class="title gradient-text">Language Learning</h1>
+            <h2>Add Friend</h2>
+        </div>
+        <div class="form">
+            <form action="/api/register" method="post">
+                <div>
+                    <label for="email">Email:</label>
+                    <input placeholder="Email" class="text" type="text" id="email" name="email" required />
+                </div>
+                <div>
+                    <label for="userName">Username:</label>
+                    <input placeholder="UserName" class="text" type="text" id="userName" name="userName" required />
+                </div>
+                <div>
+                    <label for="password">Password:</label>
+                    <input placeholder="Password" class="password" type="password" id="password" name="password" required />
+                </div>
+
+                <button class="btn">Create Account</button>
+            </form>
+        </div>
+    </section>
+</div>
+</body>
+</html>

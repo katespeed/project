@@ -1,5 +1,5 @@
 type NewFriendRequest = {
-  friendId: string;
+  email: string;
   friendName: string;
 };
 
