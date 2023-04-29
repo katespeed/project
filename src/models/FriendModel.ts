@@ -7,7 +7,7 @@ const friendRepository = AppDataSource.getRepository(Friends);
 async function getFriendsByUserId(userId: string): Promise<Friends[]> {
   const links = await friendRepository
     .createQueryBuilder('friends')
-    .where({ user: { userId } }) // NOTES: This is how you do nested WHERE clauses
+    .where({ user: { userId } })
     .leftJoinAndSelect(
       'friends.user',
       'user'
