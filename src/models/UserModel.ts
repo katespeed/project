@@ -26,7 +26,7 @@ async function getAllUsers(): Promise<User[]> {
 async function getUserByEmail(email: string): Promise<User | null> {
   const user = await userRepository
     .createQueryBuilder('user')
-    .leftJoinAndSelect('user.friend', 'friend')
+    .leftJoinAndSelect('user.friends', 'friends')
     .where('user.email = :email', { email })
     .getOne();
   return user;
@@ -35,7 +35,7 @@ async function getUserByEmail(email: string): Promise<User | null> {
 async function getUserByName(userName: string): Promise<User | null> {
   const user = await userRepository
     .createQueryBuilder('user')
-    .leftJoinAndSelect('user.friend', 'friend')
+    .leftJoinAndSelect('user.friends', 'friends')
     .where('user.userName = :userName', { userName })
     .getOne();
   return user;
@@ -44,7 +44,7 @@ async function getUserByName(userName: string): Promise<User | null> {
 async function getUserById(userId: string): Promise<User | null> {
   const user = await userRepository
     .createQueryBuilder('user')
-    .leftJoinAndSelect('user.friend', 'friend')
+    .leftJoinAndSelect('user.friends', 'friends')
     .where('user.userId = :userId', { userId })
     .getOne();
   return user;
@@ -53,7 +53,7 @@ async function getUserById(userId: string): Promise<User | null> {
 async function getUserByEmailAndName(email: string, userName: string): Promise<User | null> {
   const user = await userRepository
     .createQueryBuilder('user')
-    .leftJoinAndSelect('user.friend', 'friend')
+    .leftJoinAndSelect('user.friends', 'friends')
     .where('user.email = :email', { email })
     .andWhere('user.userName = :userName', { userName })
     .getOne();
@@ -62,7 +62,7 @@ async function getUserByEmailAndName(email: string, userName: string): Promise<U
 async function updateEmailAddress(userId: string, newEmail: string): Promise<void> {
   await userRepository
     .createQueryBuilder()
-    .leftJoinAndSelect('user.friend', 'friend')
+    .leftJoinAndSelect('user.friends', 'friends')
     .update(User)
     .set({ email: newEmail })
     .where({ userId })
@@ -72,7 +72,7 @@ async function updateEmailAddress(userId: string, newEmail: string): Promise<voi
 async function updateName(userId: string, newName: string): Promise<void> {
   await userRepository
     .createQueryBuilder()
-    .leftJoinAndSelect('user.friend', 'friend')
+    .leftJoinAndSelect('user.friends', 'friends')
     .update(User)
     .set({ userName: newName })
     .where({ userId })

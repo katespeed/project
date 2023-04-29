@@ -48,8 +48,8 @@ export class User {
   @ManyToOne(() => Game, (game) => game.user)
   game: Relation<Game>;
 
-  @OneToMany(() => Friends, (friend) => friend.user)
-  friend: Relation<Friends>[];
+  @OneToMany(() => Friends, (friends) => friends.user)
+  friends: Relation<Friends>[];
 
   @OneToOne(() => Libraries, (libraries) => libraries.user)
   @JoinColumn()

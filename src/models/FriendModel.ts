@@ -6,13 +6,16 @@ const friendRepository = AppDataSource.getRepository(Friends);
 
 async function getFriendsByUserId(userId: string): Promise<Friends[]> {
   const links = await friendRepository
-    .createQueryBuilder('friend')
+    .createQueryBuilder('friends')
     .where({ user: { userId } }) // NOTES: This is how you do nested WHERE clauses
-    .leftJoinAndSelect('friend.user', 'user') /* TODO: specify the relation you want to join with */
+    .leftJoinAndSelect(
+      'friends.user',
+      'user'
+    ) /* TODO: specify the relation you want to join with */
     .select([
       'user',
-      'friend.friendId',
-      'friend.friendName',
+      'friends.friendId',
+      'friends.friendName',
     ]) /* TODO: specify the fields you want */
     .getMany();
   return links;
@@ -44,9 +47,9 @@ async function addFriend(userId: string, friendName: string, creater: User): Pro
 
 async function friendBelongsToUser(friendId: string, userId: string): Promise<boolean> {
   const friendExists = await friendRepository
-    .createQueryBuilder('friend')
-    .leftJoinAndSelect('friend.user', 'user')
-    .where('friend.friendId = :friendId', { friendId })
+    .createQueryBuilder('friends')
+    .leftJoinAndSelect('friends.user', 'user')
+    .where('friends.friendId = :friendId', { friendId })
     .andWhere('user.userId = :userId', { userId })
     .getExists();
   return friendExists;
@@ -54,9 +57,9 @@ async function friendBelongsToUser(friendId: string, userId: string): Promise<bo
 
 async function deleteFriendById(friendId: string): Promise<void> {
   await friendRepository
-    .createQueryBuilder('friend')
+    .createQueryBuilder('friends')
     .delete()
-    .where('friendId = :friendId', { friendId })
+    .where('friends.friendId = :friendId', { friendId })
     .execute();
 }
 

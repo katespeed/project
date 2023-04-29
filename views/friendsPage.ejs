@@ -8,7 +8,8 @@
     </head>
     <body>
         <h1>Friends List</h1>
-
+        <div><a href="/addFriend">Add Friend!</a></div>
+        <div><a href="/deleteFriend">Delete Friend!</a></div>
         <% if (friends.length === 1) { %>
         <h2>You have a friend.</h2>
         <% } else { %>
@@ -18,8 +19,8 @@
             <% for( const friend of friends ) { %>
             <a href="/friends/<%= user.userId %>">
                 <li class="friend">
-                    <h3 class="friend"><%= friend.friendId %></h3>
-                    <h3 class="friend"><%= friend.friendName %></h3>
+                    <h3 class="friend"><%= friends.friendId %></h3>
+                    <h3 class="friend"><%= friends.friendName %></h3>
                 </li>
             </a>
             <% } %>

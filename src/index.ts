@@ -73,8 +73,8 @@ app.get('/api/languages', getAllLanguages);
 
 // Friends
 app.get('/friends/:userId', getFriendsForUser); // get all friends
-app.post('/api/user/friend/add', registerFriend); // register friend
-app.post('/api/user/friend/:friendId', deleteFriendForUser); // remove friend - 1
+app.post('/api/user/friends/add', registerFriend); // register friend
+app.delete('/api/user/friends/delete', deleteFriendForUser); // remove friend - 1
 
 // app.listen(PORT, () => {
 //   console.log(`Listening at http://localhost:${PORT}`);

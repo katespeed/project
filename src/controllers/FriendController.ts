@@ -4,7 +4,7 @@ import {
   addFriend,
   //   decrementFriends,
   deleteFriendById,
-  friendBelongsToUser,
+  // friendBelongsToUser,
   getFriendsByUserId,
 } from '../models/FriendModel';
 import { parseDatabaseError } from '../utils/db-utils';
@@ -41,11 +41,13 @@ async function registerFriend(req: Request, res: Response): Promise<void> {
 
   const { email, friendName } = req.body as NewFriendRequest;
   console.log(2);
+
   // check if the user with the email exists or not
   if (!(await getUserByEmail(email))) {
     res.sendStatus(404);
     return;
   }
+
   console.log(3);
   // username is not unique so getUserByNameEmail is required
   const friendUser = await getUserByEmailAndName(email, friendName);
@@ -59,29 +61,48 @@ async function registerFriend(req: Request, res: Response): Promise<void> {
   try {
     const newFriend = await addFriend(friendUser.userId, friendName, user);
     console.log(newFriend);
-    res.sendStatus(201);
   } catch (err) {
     console.error(err);
     const databaseErrorMessage = parseDatabaseError(err);
     res.status(500).json(databaseErrorMessage);
   }
+  res.sendStatus(201);
 }
 
 async function deleteFriendForUser(req: Request, res: Response): Promise<void> {
-  const { isLoggedIn, authenticatedUser } = req.session;
+  const { isLoggedIn } = req.session;
   if (!isLoggedIn) {
     // || !authenticatedUser.isAdmin) {
     res.sendStatus(401); // 401 Unauthorized
     return;
   }
   //   const user = await getUserById(authenticatedUser.userId);
-  const { friendId } = req.body as FriendIdBody;
-  const friendExists = await friendBelongsToUser(friendId, authenticatedUser.userId);
-  if (!friendExists) {
-    res.sendStatus(403); // 403 Forbidden
+  // const { friendId } = req.body as FriendIdBody;
+
+  const { email, friendName } = req.body as DeleteFriend;
+
+  // check if the user with the email and the userNama exists or not
+  const friendUser = await getUserByEmailAndName(email, friendName);
+  if (!friendUser) {
+    res.sendStatus(404);
     return;
   }
-  await deleteFriendById(friendId);
+
+  // check whether user friend is in the user's friend list
+  // const friendExists = await friendBelongsToUser(friendUser.userId, authenticatedUser.userId);
+  // if (!friendExists) {
+  //   res.sendStatus(403); // 403 Forbidden
+  //   return;
+  // }
+
+  try {
+    await deleteFriendById(friendUser.userId);
+  } catch (err) {
+    console.error(err);
+    const databaseErrorMessage = parseDatabaseError(err);
+    res.status(500).json(databaseErrorMessage);
+  }
+
   //   await decrementFriends(user);
   res.sendStatus(204); // 204 No Content
 }
