@@ -1,5 +1,6 @@
-import { Entity, ManyToMany, Relation, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, ManyToMany, ManyToOne, Relation, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { Languages } from './Language';
+import { Libraries } from './Libraries';
 
 @Entity()
 export class Word {
@@ -14,4 +15,7 @@ export class Word {
 
   @ManyToMany(() => Languages, (language) => language.word)
   language: Relation<Languages>[];
+
+  @ManyToOne(() => Libraries, (library) => library.words)
+  library: Relation<Libraries>;
 }
