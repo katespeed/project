@@ -23,6 +23,6 @@ export class Libraries {
   @OneToMany(() => Languages, (languages) => languages.libraries)
   languages: Relation<Languages>[];
 
-  @OneToMany(() => Word, (words) => words.library)
+  @OneToMany(() => Word, (words) => words.library, { cascade: ['insert', 'update'] })
   words: Relation<Word>[];
 }

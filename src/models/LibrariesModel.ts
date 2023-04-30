@@ -8,6 +8,7 @@ async function getLibraryById(libraryId: string): Promise<Libraries | null> {
     .createQueryBuilder('library')
     .leftJoinAndSelect('library.user', 'user')
     .leftJoinAndSelect('library.languages', 'languages')
+    .leftJoinAndSelect('library.words', 'words')
     .where('library.libraryId = :libraryId', { libraryId })
     .getOne();
 
