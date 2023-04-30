@@ -5,41 +5,22 @@ import { User } from '../entities/User';
 const friendRepository = AppDataSource.getRepository(Friends);
 
 async function getFriendsByUserId(userId: string): Promise<Friends[]> {
-  const links = await friendRepository
+  const friendList = await friendRepository
     .createQueryBuilder('friends')
+    .leftJoinAndSelect('friends.user', 'user')
     .where({ user: { userId } })
-    .leftJoinAndSelect(
-      'friends.user',
-      'user'
-    ) /* TODO: specify the relation you want to join with */
-    .select([
-      'user',
-      'friends.friendId',
-      'friends.friendName',
-    ]) /* TODO: specify the fields you want */
+    .select(['user', 'friends.friendId', 'friends.friendName'])
     .getMany();
-  return links;
+  return friendList;
 }
 
-// async function addFriend(friendId: string, friendName: string, creater: User): Promise<Friends> {
-//   let num = creater.numOfFriends;
-//   num += 1;
-//   let newFriend = new Friends();
-//   newFriend.friendId = friendId;
-//   newFriend.friendName = friendName;
-//   newFriend.user = creater;
-//   newFriend.user.numOfFriends = num;
-//   newFriend = await friendRepository.save(newFriend);
-//   return newFriend;
-// }
-
-async function addFriend(userId: string, friendName: string, creater: User): Promise<Friends> {
-  let num = creater.numOfFriends;
+async function addFriend(userId: string, friendName: string, creator: User): Promise<Friends> {
+  let num = creator.numOfFriends;
   num += 1;
   let newFriend = new Friends();
   newFriend.friendId = userId;
   newFriend.friendName = friendName;
-  newFriend.user = creater;
+  newFriend.user = creator;
   newFriend.user.numOfFriends = num;
   newFriend = await friendRepository.save(newFriend);
   return newFriend;
