@@ -14,10 +14,13 @@ async function getFriendsForUser(req: Request, res: Response): Promise<void> {
     res.sendStatus(401);
     return;
   }
+
   const { userId } = req.params as UserIdParam;
   const user = await getUserById(userId);
+
   if (!user) {
     res.sendStatus(404);
+    return;
   }
   const friends = await getFriendsByUserId(userId);
   // res.json(friends);
