@@ -34,7 +34,7 @@ async function makeSentence(req: Request, res: Response): Promise<void> {
   const sentence = await addWordToLibrary(worId, languageId, word, library);
   sentence.library = undefined;
 
-  res.redirect('/library/${libraryId}');
+  res.redirect(`/library/${library.libraryId}`);
 }
 
 async function getAllWords(req: Request, res: Response): Promise<void> {
