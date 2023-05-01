@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { getUserById, getUserByEmail, getUserByEmailAndName } from '../models/UserModel';
 import {
   addFriend,
-  //   decrementFriends,
   deleteFriendById,
   // friendBelongsToUser,
   getFriendsByUserId,
@@ -36,14 +35,12 @@ async function registerFriend(req: Request, res: Response): Promise<void> {
   const { authenticatedUser } = req.session;
   const user = await getUserById(authenticatedUser.userId);
   // Check if you got back `null`
-  console.log(1);
   if (!user) {
     res.sendStatus(404);
     return;
   }
 
   const { email, friendName } = req.body as NewFriendRequest;
-  console.log(2);
 
   // check if the user with the email exists or not
   if (!(await getUserByEmail(email))) {
@@ -51,10 +48,9 @@ async function registerFriend(req: Request, res: Response): Promise<void> {
     return;
   }
 
-  console.log(3);
   // username is not unique so getUserByNameEmail is required
   const friendUser = await getUserByEmailAndName(email, friendName);
-  console.log(4);
+
   // check if the newFriend already exits in the user's friend list
   // if (friendBelongsToUser(friendUser.userId, user.userId)) {
   //   res.sendStatus(404);
@@ -69,7 +65,6 @@ async function registerFriend(req: Request, res: Response): Promise<void> {
     const databaseErrorMessage = parseDatabaseError(err);
     res.status(500).json(databaseErrorMessage);
   }
-  res.sendStatus(201);
 }
 
 async function deleteFriendForUser(req: Request, res: Response): Promise<void> {
@@ -79,8 +74,6 @@ async function deleteFriendForUser(req: Request, res: Response): Promise<void> {
     res.sendStatus(401); // 401 Unauthorized
     return;
   }
-  //   const user = await getUserById(authenticatedUser.userId);
-  // const { friendId } = req.body as FriendIdBody;
 
   const { email, friendName } = req.body as DeleteFriend;
 
@@ -109,5 +102,13 @@ async function deleteFriendForUser(req: Request, res: Response): Promise<void> {
   //   await decrementFriends(user);
   res.sendStatus(204); // 204 No Content
 }
+
+// async function renderFriendsPage(req: Request, res: Response): Promise<void> {
+//   const { userId } = req.params as UserIdParam;
+
+//   const friends = await getFriendsByUserId(userId);
+
+//   res.render('friendsPage', { friends });
+// }
 
 export { getFriendsForUser, registerFriend, deleteFriendForUser };

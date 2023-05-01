@@ -4,6 +4,15 @@ import { User } from '../entities/User';
 
 const friendRepository = AppDataSource.getRepository(Friends);
 
+async function getFriendById(friendId: string): Promise<Friends> {
+  return friendRepository
+    .createQueryBuilder('friends')
+    .where({ where: { friendId } })
+    .leftJoin('friends.user', 'user')
+    .select(['friends.friendId', 'friends.friendName', 'friends.user'])
+    .getOne();
+}
+
 async function getFriendsByUserId(userId: string): Promise<Friends[]> {
   const friendList = await friendRepository
     .createQueryBuilder('friends')
@@ -22,7 +31,9 @@ async function addFriend(userId: string, friendName: string, creator: User): Pro
   newFriend.friendName = friendName;
   newFriend.user = creator;
   newFriend.user.numOfFriends = num;
+
   newFriend = await friendRepository.save(newFriend);
+
   return newFriend;
 }
 
@@ -61,4 +72,4 @@ async function deleteFriendById(friendId: string): Promise<void> {
 //   return user;
 // }
 
-export { getFriendsByUserId, addFriend, friendBelongsToUser, deleteFriendById };
+export { getFriendById, getFriendsByUserId, addFriend, friendBelongsToUser, deleteFriendById };

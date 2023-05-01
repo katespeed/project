@@ -19,14 +19,14 @@
         <h2>You have <%= friends.length %> friends.</h2>
         <% } %>
         <ul>
-            <% for( const friend of friends ) { %>
-            <a href="/friends/<%= user.userId %>">
-                <li class="friend">
-                    <h3 class="friend"><%= friends.friendId %></h3>
-                    <h3 class="friend"><%= friends.friendName %></h3>
-                </li>
-            </a>
-            <% } %>
+          <% for( const friend of friends ) { %>
+          <a href="/friends/<%= friend.userId %>">
+              <li class="friend">
+                <h3 class="friend"><%= friend.friendId %></h3>
+                <h3 class="friend"><%= friend.friendName %></h3>
+              </li>
+          </a>
+          <% } %>
         </ul>
         <h2>----------------</h2>
     </body>
