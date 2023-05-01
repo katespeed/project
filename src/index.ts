@@ -18,15 +18,15 @@ import {
   getFriendsForUser,
   registerFriend,
 } from './controllers/FriendController';
-// import { validateLoginBody, validateNewUserBody } from './validators/authValidator';
-import {
-  getAllLanguages,
-  // getAllLanguages,
-  getUserLanguages,
-  // createLanguage,
-} from './controllers/LanguageController';
-import { getLibrary, libraryUpdate, renderLibraryPage } from './controllers/LibrariesController';
-import { makeSentence, getAllWords, wordExists, getWord } from './controllers/WordController';
+import { validateLoginBody, validateNewUserBody } from './validators/authValidator';
+// import { User } from './entities/User';
+// import {
+//   getAllLanguages,
+//   getAllLanguages,
+//   getUserLanguages,
+// createLanguage,
+// } from './controllers/LanguageController';
+// import { getUserFromName } from './models/UserModel';
 
 const app: Express = express();
 app.set('view engine', 'ejs');
@@ -71,24 +71,17 @@ app.get('/languages/:userId', getUserLanguages);
 // app.post('/api/languages', createLanguage);
 app.get('/api/languages', getAllLanguages);
 
-// res.render('homePage', { email: user.email });
-
 // Friends
 app.get('/friends/:userId', getFriendsForUser); // get all friends
-app.post('/api/user/friends/add', registerFriend); // register friend
-app.post('/api/user/friends/delete', deleteFriendForUser); // remove friend - 1
-
-// Libraries
-app.get('/api/library/:libraryId', getLibrary);
-app.post('api/user/library/update', libraryUpdate);
-app.get('/library', renderLibraryPage);
+app.post('/api/user/friend/add', registerFriend); // register friend
+app.post('/api/user/friend/:friendId', deleteFriendForUser); // remove friend - 1
+app.get('/api/friends', getFriend); // get friend by Name
 
 // Words
 app.post('/api/library/:libraryId/words', makeSentence);
 app.get('/api/words/:worId', getWord);
 app.get('/words/:languageId', getAllWords);
 app.get('/api/languages/:languageId/words', wordExists);
-
 // app.listen(PORT, () => {
 //   console.log(`Listening at http://localhost:${PORT}`);
 //   console.log(`My database is called: ${process.env.DATABASE_NAME}`);

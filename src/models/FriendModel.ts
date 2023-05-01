@@ -20,17 +20,7 @@ async function getFriendsByUserId(userId: string): Promise<Friends[]> {
     .where({ user: { userId } })
     .select(['user', 'friends.friendId', 'friends.friendName'])
     .getMany();
-
   return friendList;
-}
-
-async function getFriendByName(friendName: string): Promise<Friends | null> {
-  const friend = await friendRepository
-    .createQueryBuilder('friens')
-    .leftJoinAndSelect('friend.user', 'user')
-    .where('friend.friendName = :friendName', { friendName })
-    .getOne();
-  return friend;
 }
 
 async function addFriend(userId: string, friendName: string, creator: User): Promise<Friends> {
@@ -38,7 +28,6 @@ async function addFriend(userId: string, friendName: string, creator: User): Pro
   newFriend.friendId = userId;
   newFriend.friendName = friendName;
   newFriend.user = creator;
-
   newFriend = await friendRepository.save(newFriend);
 
   return newFriend;
@@ -63,11 +52,21 @@ async function deleteFriendById(friendId: string): Promise<void> {
     .execute();
 }
 
-export {
-  getFriendsByUserId,
-  addFriend,
-  friendBelongsToUser,
-  deleteFriendById,
-  getFriendByName,
-  getFriendById,
-};
+// async function decrementFriends(userData: User): Promise<User> {
+//   const user = userData;
+//   user.numOfFriends -= 1;
+//   if (user.numOfFriends < 0) {
+//     user.numOfFriends = 0;
+//   }
+//   await friendRepository
+//     .createQueryBuilder()
+//     .leftJoinAndSelect('user.friend', 'friend')
+//     .update(User)
+//     .set({ numOfFriends: user.numOfFriends })
+//     .where({ userId: user.userId })
+//     // .limit(0)
+//     .execute();
+//   return user;
+// }
+
+export { getFriendsByUserId, addFriend, friendBelongsToUser, deleteFriendById, getFriendById };
