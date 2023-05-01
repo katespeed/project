@@ -97,17 +97,25 @@ app.get('/api/languages/:languageId/words', wordExists);
 const server = app.listen(PORT, () => {
   console.log(`Listening at http://localhost:${PORT}`);
 });
-
 // socket
+
 const connectedClients: Record<string, CustomWebSocket> = {};
+const rooms: Record<string, CustomWebSocket> = {};
+// const chatRooms: ChatRoom[] = [];
+
+// console.log(roomName);
 const socketServer = new Server<ClientToServerEvents, ServerToClientEvents, null, null>(server);
+
 socketServer.use((socket, next) => {
   sessionMiddleware(socket.request as Request, {} as Response, next as NextFunction);
 });
 
 socketServer.on('connection', (socket) => {
+  let roomNames = '';
+  console.log(roomNames);
+  console.log("socketServer.on('connection', (socket)");
   const req = socket.request;
-
+  // const rooms = new Map<string, WebSocket[]>();
   // We need this chunk of code so that socket.io
   // will automatically reload the session data
   // don't change this code
@@ -120,7 +128,6 @@ socketServer.on('connection', (socket) => {
       }
     });
   });
-
   // This is just to make sure only logged in users
   // are able to connect to a game
   if (!req.session.isLoggedIn) {
@@ -128,23 +135,59 @@ socketServer.on('connection', (socket) => {
     socket.disconnect();
     return;
   }
-
   const { authenticatedUser } = req.session;
-  const { email } = authenticatedUser;
+  let { userName } = authenticatedUser;
+  if (!userName) {
+    userName = 'unknown user';
+  }
+  console.log(`${userName} has connected`);
+  connectedClients[userName] = socket;
 
-  console.log(`${email} has connected`);
-  connectedClients[email] = socket;
+  socketServer.emit('enteredChat', `${userName} has entered the chat`);
 
-  socket.on('disconnect', () => {
-    delete connectedClients[email];
-    console.log(`${email} has disconnected`);
-    socketServer.emit('exitedChat', `${email} has left the chat.`);
+  //   socket.on('chatMessage', (msg: string) => {
+  //     console.log(`received a chatMessage event from the client: ${userName}`);
+  //     socketServer.emit('chatMessage', userName, msg);
+  //   });
+
+  //   socket.on('disconnect', () => {
+  //     delete connectedClients[userName];
+  //     console.log(`${userName} has disconnected`);
+  //     socketServer.emit('exitedChat', `${userName} has left the chat.`);
+  //   });
+
+  socket.on('joinPrivateRoom', (name): void => {
+    // console.log(`${name} is attempting to create room`);
+    // if (!(name in connectedClients)) {
+    //   console.log(`${name} not connected`);
+    //   return;
+    // }
+
+    // const receiverSocket = connectedClients[name];
+    // const { session: senderSession } = socket.request;
+    // const { session: receiverSession } = receiverSocket.request;
+
+    // const { userName } = senderSession.authenticatedUser;
+    // const friendName = receiverSession.authenticatedUser.userName;
+    // console.log('userId: ', userName);
+    // console.log('friendId: ', friendName);
+    // const roomName = userName.concat(friendName.toString());
+    const roomName = name;
+    roomNames = roomName;
+    rooms[roomName] = socket;
+    console.log('You Joined: ', roomName);
+    socket.join(roomName);
   });
-
-  socketServer.emit('enteredChat', `${email} has entered the chat`);
+  socketServer.to(roomNames).emit('enteredChat', `${userName} has entered the chat`);
 
   socket.on('chatMessage', (msg: string) => {
-    console.log(`received a chatMessage event from the client: ${email}`);
-    socketServer.emit('chatMessage', email, msg);
+    console.log(`received a chatMessage event from the client: ${userName}`);
+    socketServer.to(roomNames).emit('chatMessage', userName, msg);
+  });
+
+  socket.on('disconnect', () => {
+    delete connectedClients[userName];
+    console.log(`${userName} has disconnected`);
+    socketServer.to(roomNames).emit('exitedChat', `${userName} has left the chat.`);
   });
 });

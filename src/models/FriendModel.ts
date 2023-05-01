@@ -24,6 +24,15 @@ async function getFriendsByUserId(userId: string): Promise<Friends[]> {
   return friendList;
 }
 
+async function getFriendByName(friendName: string): Promise<Friends | null> {
+  const friend = await friendRepository
+    .createQueryBuilder('friens')
+    .leftJoinAndSelect('friend.user', 'user')
+    .where('friend.friendName = :friendName', { friendName })
+    .getOne();
+  return friend;
+}
+
 async function addFriend(userId: string, friendName: string, creator: User): Promise<Friends> {
   let newFriend = new Friends();
   newFriend.friendId = userId;
@@ -54,4 +63,11 @@ async function deleteFriendById(friendId: string): Promise<void> {
     .execute();
 }
 
-export { getFriendById, getFriendsByUserId, addFriend, friendBelongsToUser, deleteFriendById };
+export {
+  getFriendsByUserId,
+  addFriend,
+  friendBelongsToUser,
+  deleteFriendById,
+  getFriendByName,
+  getFriendById,
+};

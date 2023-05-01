@@ -32,7 +32,7 @@ async function getUserByEmail(email: string): Promise<User | null> {
   return user;
 }
 
-async function getUserByName(userName: string): Promise<User | null> {
+async function getUserFromName(userName: string): Promise<User | null> {
   const user = await userRepository
     .createQueryBuilder('user')
     .leftJoinAndSelect('user.friends', 'friends')
@@ -114,8 +114,8 @@ export {
   addUser,
   getUserByEmail,
   getUserById,
-  getUserByName,
   getUserByEmailAndName,
+  getUserFromName,
   getAllUsers,
   allUserData,
   updateEmailAddress,

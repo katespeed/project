@@ -10,6 +10,7 @@ import {
   addFriend,
   deleteFriendById,
   friendBelongsToUser,
+  getFriendByName,
   getFriendsByUserId,
 } from '../models/FriendModel';
 import { parseDatabaseError } from '../utils/db-utils';
@@ -30,6 +31,12 @@ async function getFriendsForUser(req: Request, res: Response): Promise<void> {
   const friends = await getFriendsByUserId(userId);
   // res.json(friends);
   res.render('friendsPage', { friends });
+}
+
+async function getFriend(req: Request, res: Response): Promise<void> {
+  const { friendName } = req.params as FriendNameParam;
+  const users = await getFriendByName(friendName);
+  res.json(users);
 }
 
 async function registerFriend(req: Request, res: Response): Promise<void> {
@@ -121,4 +128,4 @@ async function deleteFriendForUser(req: Request, res: Response): Promise<void> {
   res.render('friendsPage', { friends });
 }
 
-export { getFriendsForUser, registerFriend, deleteFriendForUser };
+export { getFriendsForUser, registerFriend, deleteFriendForUser, getFriend };

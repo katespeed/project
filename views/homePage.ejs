@@ -2,6 +2,7 @@
 <html lang="en">
 
     <head>
+        <link rel="stylesheet" href="//cdn.rawgit.com/milligram/milligram/master/dist/milligram.min.css">
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,9 +13,11 @@
         <h1>Home Page</h1>
         <h1>Welcome to Language Learning <%= userName %>!!!</h1>
         <div><a href="/users/<%= userId %>">Profile!</a></div>
-        <div><a href="/chat">Chat</a></div>
+        <div><a href="/chat">Global Chat</a></div>
+        <div><a href="/privateChat">Individual Chat</a></div>
         <div><a href="/languages/<%= userId %>">Language</a></div>
         <div><a href="/friends/<%= userId %>">Friends</a></div>
+        <div><a href="/test">Test</a></div>
     </body>
 
 </html>

@@ -15,3 +15,7 @@ type FriendIdBody = {
 type FriendIdParam = {
   friendId: string;
 };
+
+type FriendNameParam = {
+  friendName: string;
+};

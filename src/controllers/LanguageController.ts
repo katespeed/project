@@ -1,32 +1,13 @@
 import { Request, Response } from 'express';
 import {
   addLanguage,
+  // addLanguage,
   getLanguageById,
   getLanguages,
   getLanguagesByUserId,
   userHasLanguageForBook,
 } from '../models/LanguageModel';
 import { getUserById } from '../models/UserModel';
-
-// async function insertLanguage(req: Request, res: Response): Promise<void> {
-//   const { isLoggedIn, authenticatedUser } = req.session;
-//   if (!isLoggedIn) {
-//     // res.sendStatus(401);
-//     res.redirect('/login');
-//     return;
-//   }
-//   // const user = await getUserById(authenticatedUser.userId);
-//   const { language } = req.body as NewLanguageRequest;
-//   const languageExists = await userHasLanguageForBook(authenticatedUser.userId, languageId);
-//   if (languageExists) {
-//     res.sendStatus(409); // 409 Conflict
-//     return;
-//   }
-
-//   const languages = await addLanguage(language);
-//   res.status(201).json(languages);
-//   // res.render('languagesPage', { languages });
-// }
 
 async function createLanguage(req: Request, res: Response): Promise<void> {
   // const { bookId } = req.params as { bookId: string };

@@ -8,6 +8,7 @@ import {
   allUserData,
   updateEmailAddress,
   updateName,
+  getUserFromName,
   //   incrementFriends,
   //   decrementFriends,
 } from '../models/UserModel';
@@ -21,6 +22,12 @@ async function getAllUsers(req: Request, res: Response): Promise<void> {
 async function getUsers(req: Request, res: Response): Promise<void> {
   const { userId } = req.params as UserIdParam;
   const users = await getUserById(userId);
+  res.json(users);
+}
+
+async function getUserByName(req: Request, res: Response): Promise<void> {
+  const { friendName } = req.params as FriendNameParam;
+  const users = await getUserFromName(friendName);
   res.json(users);
 }
 
@@ -94,6 +101,7 @@ async function logIn(req: Request, res: Response): Promise<void> {
   // NOTES: Now we can add whatever data we want to the session
   req.session.authenticatedUser = {
     userId: user.userId,
+    userName: user.userName,
     email: user.email,
   };
   req.session.isLoggedIn = true;
@@ -169,4 +177,5 @@ export {
   updateUserEmail,
   updateUserName,
   getUserProfileData,
+  getUserByName,
 };
