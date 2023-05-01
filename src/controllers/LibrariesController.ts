@@ -42,7 +42,12 @@ async function getLibrary(req: Request, res: Response): Promise<void> {
 
   const belongs = libraryBelongsToUser(libraryId, authenticatedUser.userId);
 
-  if (!isLoggedIn || !belongs) {
+  if (!isLoggedIn) {
+    res.redirect('/login');
+    return;
+  }
+
+  if (!belongs) {
     res.sendStatus(403);
     return;
   }
@@ -55,4 +60,14 @@ async function getLibrary(req: Request, res: Response): Promise<void> {
   res.sendStatus(200).json(library);
 }
 
-export { libraryUpdate, getLibrary };
+async function renderLibraryPage(req: Request, res: Response): Promise<void> {
+  const { libraryId } = req.params as { libraryId: string };
+
+  const library = getLibraryById(libraryId);
+
+  const { words } = await library;
+
+  res.render('libraryPage', { words });
+}
+
+export { libraryUpdate, getLibrary, renderLibraryPage };

@@ -16,6 +16,6 @@ export class Word {
   @ManyToMany(() => Languages, (language) => language.word)
   language: Relation<Languages>[];
 
-  @ManyToOne(() => Libraries, (library) => library.words)
+  @ManyToOne(() => Libraries, (library) => library.words, { cascade: ['insert', 'update'] })
   library: Relation<Libraries>;
 }

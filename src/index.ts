@@ -25,6 +25,8 @@ import {
   getUserLanguages,
   // createLanguage,
 } from './controllers/LanguageController';
+import { getLibrary, libraryUpdate, renderLibraryPage } from './controllers/LibrariesController';
+import { makeSentence, getAllWords, wordExists, getWord } from './controllers/WordController';
 
 const app: Express = express();
 app.set('view engine', 'ejs');
@@ -75,6 +77,17 @@ app.get('/api/languages', getAllLanguages);
 app.get('/friends/:userId', getFriendsForUser); // get all friends
 app.post('/api/user/friends/add', registerFriend); // register friend
 app.post('/api/user/friends/delete', deleteFriendForUser); // remove friend - 1
+
+// Libraries
+app.get('/api/library/:libraryId', getLibrary);
+app.post('api/user/library/update', libraryUpdate);
+app.get('/library', renderLibraryPage);
+
+// Words
+app.post('/api/library/:libraryId/words', makeSentence);
+app.get('/api/words/:worId', getWord);
+app.get('/words/:languageId', getAllWords);
+app.get('/api/languages/:languageId/words', wordExists);
 
 // app.listen(PORT, () => {
 //   console.log(`Listening at http://localhost:${PORT}`);

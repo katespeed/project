@@ -1,7 +1,6 @@
 import {
   Entity,
   PrimaryGeneratedColumn,
-  ManyToMany,
   ManyToOne,
   OneToMany,
   OneToOne,
@@ -41,7 +40,7 @@ export class User {
   @Column({ default: false })
   isAdmin: boolean;
 
-  @ManyToMany(() => Languages, (languages) => languages.user)
+  @ManyToOne(() => Languages, (languages) => languages.user)
   @JoinTable()
   language: Relation<Languages>[];
 

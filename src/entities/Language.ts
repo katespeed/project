@@ -24,8 +24,8 @@ export class Languages {
   @Column({ default: 0 })
   wordCount: number;
 
-  @ManyToMany(() => User, (user) => user.language)
-  user: Relation<User>[];
+  @ManyToOne(() => User, (user) => user.language)
+  user: Relation<User>;
 
   @OneToMany(() => Game, (game) => game.user)
   game: Relation<Game>[];
