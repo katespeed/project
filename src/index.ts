@@ -132,7 +132,7 @@ socketServer.on('connection', (socket) => {
   console.log(`${userName} has connected`);
   connectedClients[userName] = socket;
 
-  socketServer.emit('enteredChat', `${userName} has entered the chat`);
+  // socketServer.emit('enteredChat', `${userName} has entered the chat`);
 
   //   socket.on('chatMessage', (msg: string) => {
   //     console.log(`received a chatMessage event from the client: ${userName}`);
@@ -166,8 +166,8 @@ socketServer.on('connection', (socket) => {
     rooms[roomName] = socket;
     console.log('You Joined: ', roomName);
     socket.join(roomName);
+    socketServer.to(roomNames).emit('enteredChat', `${userName} has entered the chat`);
   });
-  socketServer.to(roomNames).emit('enteredChat', `${userName} has entered the chat`);
 
   socket.on('chatMessage', (msg: string) => {
     console.log(`received a chatMessage event from the client: ${userName}`);
