@@ -25,7 +25,6 @@ async function getFriendsByUserId(userId: string): Promise<Friends[]> {
 
 async function addFriend(userId: string, friendName: string, creator: User): Promise<Friends> {
   let num = creator.numOfFriends;
-  num += 1;
   let newFriend = new Friends();
   newFriend.friendId = userId;
   newFriend.friendName = friendName;
@@ -34,6 +33,11 @@ async function addFriend(userId: string, friendName: string, creator: User): Pro
 
   newFriend = await friendRepository.save(newFriend);
 
+  // friend + 1
+  if (newFriend) {
+    num += 1;
+    newFriend.user.numOfFriends = num;
+  }
   return newFriend;
 }
 
