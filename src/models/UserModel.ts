@@ -79,6 +79,37 @@ async function updateName(userId: string, newName: string): Promise<void> {
     .execute();
 }
 
+async function incrementNumOfFriends(userData: User): Promise<User> {
+  const updatedUser = userData;
+  updatedUser.numOfFriends += 1;
+
+  await userRepository
+    .createQueryBuilder()
+    .update(User)
+    .set({ numOfFriends: updatedUser.numOfFriends })
+    .where({ userId: updatedUser.userId })
+    .execute();
+
+  return updatedUser;
+}
+
+async function decrementNumOfFriends(userData: User): Promise<User> {
+  const updatedUser = userData;
+  updatedUser.numOfFriends -= 1;
+
+  if (updatedUser.numOfFriends <= 0) {
+    updatedUser.numOfFriends = 0;
+  }
+  await userRepository
+    .createQueryBuilder()
+    .update(User)
+    .set({ numOfFriends: updatedUser.numOfFriends })
+    .where({ userId: updatedUser.userId })
+    .execute();
+
+  return updatedUser;
+}
+
 export {
   addUser,
   getUserByEmail,
@@ -89,4 +120,6 @@ export {
   allUserData,
   updateEmailAddress,
   updateName,
+  incrementNumOfFriends,
+  decrementNumOfFriends,
 };

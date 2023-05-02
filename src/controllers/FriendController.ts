@@ -1,5 +1,11 @@
 import { Request, Response } from 'express';
-import { getUserById, getUserByEmail, getUserByEmailAndName } from '../models/UserModel';
+import {
+  getUserById,
+  getUserByEmail,
+  getUserByEmailAndName,
+  incrementNumOfFriends,
+  decrementNumOfFriends,
+} from '../models/UserModel';
 import {
   addFriend,
   deleteFriendById,
@@ -48,7 +54,7 @@ async function registerFriend(req: Request, res: Response): Promise<void> {
     return;
   }
 
-  // username is not unique so getUserByNameEmail is required
+  // username is not unique so getUserByEmailAndName is required
   const friendUser = await getUserByEmailAndName(email, friendName);
 
   const friendExists = await friendBelongsToUser(friendUser.userId, user.userId);
@@ -67,6 +73,9 @@ async function registerFriend(req: Request, res: Response): Promise<void> {
     const databaseErrorMessage = parseDatabaseError(err);
     res.status(500).json(databaseErrorMessage);
   }
+
+  await incrementNumOfFriends(user);
+
   const friends = await getFriendsByUserId(user.userId);
   res.render('friendsPage', { friends });
 }
@@ -105,7 +114,9 @@ async function deleteFriendForUser(req: Request, res: Response): Promise<void> {
     res.status(500).json(databaseErrorMessage);
   }
 
-  //   await decrementFriends(user);
+  const user = await getUserById(authenticatedUser.userId);
+  await decrementNumOfFriends(user);
+
   const friends = await getFriendsByUserId(authenticatedUser.userId);
   res.render('friendsPage', { friends });
 }
