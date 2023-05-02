@@ -19,9 +19,9 @@
         <a href="/addLanguages">Add a new Language</a>
         <ul>
             <% for( const language of languages ) { %>
-            <a href="/languages/<%= user.userId %>">
+            <a href="/languages/<%= language.userId %>">
                 <li class="book">
-                    <h3 class="bookTitle"><%= languages.language %></h3>
+                    <h3 class="bookTitle"><%= language.language %></h3>
                 </li>
             </a>
             <% } %>

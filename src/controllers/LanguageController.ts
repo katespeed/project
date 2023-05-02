@@ -31,7 +31,9 @@ async function createLanguage(req: Request, res: Response): Promise<void> {
   }
 
   const languages = await addLanguage(language, user);
-  languages.user = undefined;
+  for (let i = 0; i < languages.length - 1; i += 1) {
+    languages[i].user = undefined;
+  }
 
   //   res.status(201).json(languages);
   res.render('languagesPage', { languages });

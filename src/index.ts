@@ -19,7 +19,11 @@ import {
   registerFriend,
 } from './controllers/FriendController';
 // import { validateLoginBody, validateNewUserBody } from './validators/authValidator';
-import { getAllLanguages, getUserLanguages } from './controllers/LanguageController';
+import {
+  createLanguage,
+  getAllLanguages,
+  getUserLanguages,
+} from './controllers/LanguageController';
 // import { User } from './entities/User';
 // import {
 //   getAllLanguages,
@@ -69,13 +73,13 @@ app.get('/users/:userId', getUserProfileData); // get user profile
 
 // Language
 app.get('/languages/:userId', getUserLanguages);
-// app.post('/api/languages', createLanguage);
+app.post('/api/languages', createLanguage);
 app.get('/api/languages', getAllLanguages);
 
 // Friends
 app.get('/friends/:userId', getFriendsForUser); // get all friends
-app.post('/api/user/friend/add', registerFriend); // register friend
-app.post('/api/user/friend/:friendId', deleteFriendForUser); // remove friend - 1
+app.post('/api/user/friends/add', registerFriend); // register friend
+app.post('/api/user/friends/:friendId', deleteFriendForUser); // remove friend - 1
 // app.get('/api/friends', getFriendsForUser); // get friend by Name
 
 // app.listen(PORT, () => {
