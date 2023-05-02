@@ -14,6 +14,8 @@ async function addLanguage(language: string, byUser: User): Promise<Languages> {
   } else {
     newLanguage.user.language.push(newLanguage);
   }
+  //   newLanguage.user.language.length += 1;
+  //   newLanguage.user.language[newLanguage.user.language.length - 1] = newLanguage;
   newLanguage = await languageRepository.save(newLanguage);
   return newLanguage;
 }

@@ -8,7 +8,7 @@ import {
   allUserData,
   updateEmailAddress,
   updateName,
-  getUserFromName,
+  // getUserFromName,
   //   incrementFriends,
   //   decrementFriends,
 } from '../models/UserModel';
@@ -25,11 +25,11 @@ async function getUsers(req: Request, res: Response): Promise<void> {
   res.json(users);
 }
 
-async function getUserByName(req: Request, res: Response): Promise<void> {
-  const { friendName } = req.params as FriendNameParam;
-  const users = await getUserFromName(friendName);
-  res.json(users);
-}
+// async function getUserByName(req: Request, res: Response): Promise<void> {
+//   const { friendName } = req.params as FriendNameParam;
+//   const users = await getUserFromName(friendName);
+//   res.json(users);
+// }
 
 async function registerUser(req: Request, res: Response): Promise<void> {
   const { userName, email, password } = req.body as NewUserRequest;
@@ -177,5 +177,5 @@ export {
   updateUserEmail,
   updateUserName,
   getUserProfileData,
-  getUserByName,
+  // getUserByName,
 };

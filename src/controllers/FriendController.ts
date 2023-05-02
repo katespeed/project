@@ -41,7 +41,6 @@ async function registerFriend(req: Request, res: Response): Promise<void> {
   const { authenticatedUser } = req.session;
   const user = await getUserById(authenticatedUser.userId);
   // Check if you got back `null`
-  console.log(1);
   if (!user) {
     res.sendStatus(404);
     return;

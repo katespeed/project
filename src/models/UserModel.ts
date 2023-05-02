@@ -78,7 +78,6 @@ async function updateName(userId: string, newName: string): Promise<void> {
     .where({ userId })
     .execute();
 }
-
 async function incrementNumOfFriends(userData: User): Promise<User> {
   const updatedUser = userData;
   updatedUser.numOfFriends += 1;
@@ -114,12 +113,12 @@ export {
   addUser,
   getUserByEmail,
   getUserById,
-  getUserByEmailAndName,
   getUserFromName,
   getAllUsers,
   allUserData,
   updateEmailAddress,
   updateName,
+  getUserByEmailAndName,
   incrementNumOfFriends,
   decrementNumOfFriends,
 };
